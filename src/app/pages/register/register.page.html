@@ -1,0 +1,52 @@
+<ion-header color="primary">
+  <ion-toolbar>
+    <ion-title><strong>Register</strong></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="col-lg-8">
+    <ion-row col-6 offset-3 text-center>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Please enter your valid information</ion-card-subtitle>
+
+          </ion-card-header>
+          <form [formGroup]="registerGroup">
+            <ion-card-content>
+              <ion-item>
+                <ion-input formControlName="username" text-center placeholder="Username" type="text"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="email" text-center placeholder="Email" type="email"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="password" text-center placeholder="Password" type="password"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="repassword" text-center placeholder="Retype password" type="password">
+                </ion-input>
+              </ion-item>
+           
+                <ion-item>
+                  <ion-grid class="col-lg-12">
+                    <ion-row class="btn-group col-lg-6 offset-lg-3">
+                      <ion-col class="col-lg-6">
+                        <ion-button class="col-lg-10" (click)="saveUser()" color="primary">Submit</ion-button>
+                      </ion-col>
+                      <ion-col class="col-lg-6">
+                        <ion-button class="col-lg-10" (click)="goToLogin()" color="secondary">Login</ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+            </ion-card-content>
+          </form>
+        </ion-card>
+
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
