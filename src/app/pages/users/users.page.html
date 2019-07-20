@@ -3,9 +3,7 @@
     <ion-title><ion-icon name="wifi"></ion-icon><strong> Online</strong></ion-title>
     
   </ion-toolbar>
-  <ion-toolbar>
-      <ion-title color="danger"><small>{{message}}</small></ion-title>
-  </ion-toolbar>
+  
 </ion-header>
 
 <ion-content>
@@ -18,10 +16,10 @@
         </ion-grid>
    
   <ion-list *ngFor="let user of users">
-  
-    <ion-item  >
-      <ion-label><img src="assets/icon/online.png" height="12px" width="12px">{{user.username}}</ion-label>
-    </ion-item>
- 
+    <ion-button id="{{user.userEmail}}" class="col-lg-12" (click)="openChatWindow($event)">
+    
+      <img src="assets/icon/online.png" height="12px" width="12px">{{user.username}}
+   
+  </ion-button>
     </ion-list>
 </ion-content>

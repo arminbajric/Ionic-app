@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomePage } from './home.page';
+import { CwindowPage } from '../pages/cwindow/cwindow.page';
+import { CwindowPageModule } from '../pages/cwindow/cwindow.module';
 const routes: Routes = [
   
   {
@@ -29,8 +31,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    CwindowPageModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  
 })
 export class HomePageModule {}

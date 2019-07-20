@@ -8,6 +8,7 @@ import { ChatService } from '../service/chat.service';
 })
 export class HomePage {
   users = [];
+  temp:any;
   messages: any;
   online: number;
   constructor(
@@ -18,6 +19,7 @@ export class HomePage {
     this.chat.connectWS().then(value => {
       if (value) {
         this.chat.getOnlineUsers().subscribe(response => {
+          this.users=[];
           this.users = response;
           console.log(this.users)
           if((this.users.length>0))
@@ -29,9 +31,11 @@ export class HomePage {
           }
 
         })
-        this.chat.subscribeToUsers().subscribe(response => {
-          console.log(this.users);
-          this.users = response;
+        this.chat.subscribeToUsers().subscribe((response:any) => {
+          this.users=[];
+          this.temp = JSON.parse(response);
+          this.users=this.temp.body;
+          console.log(this.users.length);
           if((this.users.length>0))
           {
           this.online = this.users.length - 1

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../../service/chat.service';
+import { ModalController } from '@ionic/angular';
+import { CwindowPage } from '../cwindow/cwindow.page';
 
 
 @Component({
@@ -12,21 +14,30 @@ users=[];
 me:any;
 message:any;
 loaded:boolean;
-  constructor(private chat:ChatService) { }
+temp:any;
+  constructor(private chat:ChatService,private modalController: ModalController) { }
 
   ngOnInit() {
    this.chat.getOnlineUsers().subscribe(response=>{
   this.users=response;
+  for(let i=0;i<this.users.length;i++)
+  {
+    let temp=this.users[i];
+    if(this.chat.getMyDetails().match(temp.userEmail))
+    {
+      this.users.splice(i, 1);
+    }
+  }
   })
   this.loaded=false;
-  this.chat.subscribeToUsers().subscribe(response=>{
+  this.chat.subscribeToUsers().subscribe((response:any)=>{
     this.users=[];
-   
-    this.users=response;
+    this.temp = JSON.parse(response);
+    this.users=this.temp.body;
     for(let i=0;i<this.users.length;i++)
     {
       let temp=this.users[i];
-      if(temp.userEmail==this.chat.getMyDetails())
+      if(this.chat.getMyDetails().match(temp.userEmail))
       {
         this.users.splice(i, 1);
       }
@@ -45,5 +56,21 @@ loaded:boolean;
     this.loaded=true;
    
   },1000)
+}
+async openChatWindow(event) {
+  let user = (event.target as Element).id;
+  let name=(event.target as Element).textContent;
+  let room;
+  await this.chat.generateConversationRoom(user,this.chat.getMyDetails()).then(value=>{
+        room=value;
+  })
+  const modal = await this.modalController.create({
+    component: CwindowPage,
+    componentProps:{
+      'room':room,
+      'buddy':name
+    }
+  });
+  return await modal.present();
 }
 }

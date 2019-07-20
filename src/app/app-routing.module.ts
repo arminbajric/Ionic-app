@@ -5,10 +5,10 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
  
-  {  path: '', loadChildren: 'app/home/home.module#HomePageModule'  },
-  { path: 'signin', loadChildren: './pages/signin/signin.module#SigninPageModule' },
+  {  path: '', loadChildren: 'app/home/home.module#HomePageModule'  },  
+   { path: 'signin', loadChildren: './pages/signin/signin.module#SigninPageModule' },
   { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
- 
+
  
   
 ];

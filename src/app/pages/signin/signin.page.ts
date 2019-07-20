@@ -13,8 +13,9 @@ loginGroup:FormGroup;
   constructor(private chat:ChatService,private router:Router) { }
 
   ngOnInit() {
-    if(this.chat.getMyDetails()!='undefined'||this.chat.getMyDetails()!='')
+    if(!typeof(this.chat.getMyDetails()).match( undefined) && !this.chat.getMyDetails().match('') )
     {
+      console.log(this.chat.getMyDetails())
       this.router.navigate(['chat/messages'])
     }
     this.loginGroup=new FormGroup({

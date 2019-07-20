@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{buddy}}  <ion-icon name="chatboxes"></ion-icon></ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-list >
+  <ion-grid   class="window" *ngFor="let message of messages" >
+ 
+      <ion-row class="block">
+        <ion-col size="12">
+    <ion-grid [ngClass]="[message.author===me?'user':'buddy']">
+    
+    <ion-row >
+      <ion-col >
+          {{message.text}}
+      </ion-col>
+    </ion-row>
+    
+    <ion-row  >
+        <ion-col ><strong>{{message.username}}</strong></ion-col>
+      </ion-row>
+   
+    <ion-row  >
+      <ion-col ><small>{{message.createDate|date: 'dd/MM/yyyy H:mm:ss' }}</small></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-col>
+  </ion-row>
+    
+  <br>
+  </ion-grid>
+
+  
+</ion-list>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <form [formGroup]="chatGroup">
+      <ion-row size="12">
+    <ion-col size="10">
+      <ion-input formControlName="messages"  placeholder="Message"></ion-input>
+    </ion-col>
+    <ion-col size="2" text-right>
+      <ion-button (click)="sendMessage()" id="{{room}}">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</form>
+  </ion-grid>
+  </ion-toolbar>
+</ion-footer>

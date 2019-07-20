@@ -5,32 +5,32 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { CookieService } from 'ngx-cookie-service';
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  
-  constructor(private http: HttpClient,private cookie:CookieService) { }
+
+  constructor(private http: HttpClient, private cookie: CookieService) { }
 
   connectionActive: boolean;
-  stompClient:Stomp;
-  messages=[];
-  users=[];
-  environment={
-    devHost:'http://localhost:3001'
+  stompClient: Stomp;
+  messages = [];
+  users = [];
+  environment = {
+    devHost: 'http://localhost:3001'
   }
-  connectWS():Promise<boolean> {
-    var socket = new SockJS( this.environment.devHost+ '/ws');
+  connectWS(): Promise<boolean> {
+    var socket = new SockJS(this.environment.devHost + '/ws');
     this.stompClient = Stomp.over(socket);
     let that = this;
-   return new Promise(resolve=> (this.stompClient.connect({ email: this.cookie.get('mychat-user') }, function (frame) {
+    return new Promise(resolve => (this.stompClient.connect({ email: this.cookie.get('mychat-user') }, function (frame) {
       that.setConnectionState(true);
       that.stompClient.send('/app/newUsers', {}, JSON.stringify({ 'author': that.cookie.get('mychat-user') }))
-    
-  resolve(true);
+
+      resolve(true);
 
     }, function (error) {
       setTimeout(function () { that.connectWS() }, 1000);
@@ -41,28 +41,28 @@ export class ChatService {
 
 
   }
-  sendMessageToRoom(room,text){
-    this.stompClient.send('/app/newMessage/'+room, {}, JSON.stringify({ 'author': this.cookie.get('mychat-user'),'text':text,'room':room }))
+  sendMessageToRoom(room, text) {
+    this.stompClient.send('/app/newMessage/' + room, {}, JSON.stringify({ 'author': this.cookie.get('mychat-user'), 'text': text, 'room': room }))
   }
-  subscribeToRoom(room):Observable<any>{
+  subscribeToRoom(room): Observable<string[]> {
     let subject = new Subject<any>();
-   this.stompClient.subscribe('/topic/newMessage/'+room, function (message) {
-      subject.next((JSON.parse(message.body)))
+    this.stompClient.subscribe('/topic/newMessage/' + room, function (message) {
+      subject.next((message.body))
 
     });
-    
+
     return subject.asObservable();
   }
-  subscribeToUsers():Observable<any>{
-   
+  subscribeToUsers(): Observable<any> {
+
     let subject = new Subject<any>();
     this.stompClient.subscribe('/topic/users', function (message) {
-   
-    subject.next(((message.body)))
+
+      subject.next(((message.body)))
     });
     return subject.asObservable();
   }
-  
+
   refreshMessages(messages) {
     this.messages = messages;
 
@@ -82,7 +82,7 @@ export class ChatService {
   }
   getRoomMessages(room): Observable<any> {
 
-    return this.http.get(this.environment.devHost + '/room-messages', {params:new HttpParams().set('users',room), observe: 'response' }).pipe(map(response => {
+    return this.http.get(this.environment.devHost + '/room-messages', { params: new HttpParams().set('users', room), observe: 'response' }).pipe(map(response => {
       if (response.body) {
         return response.body;
       }
@@ -99,7 +99,7 @@ export class ChatService {
   }
   getUsersConversation(user, buddy): Observable<any> {
 
-    return this.http.get(this.environment.devHost + '/conversation', { params: new HttpParams().set('user', user).set('type', buddy), observe: 'response' }).pipe(map(response => {
+    return this.http.get(this.environment.devHost + '/conversation', { params: new HttpParams().set('user', user).set('type', buddy), observe: 'response' }).pipe(map((response:any) => {
       return response.body;
     }))
   }
@@ -134,10 +134,17 @@ export class ChatService {
     }))
   }
   generateConversationRoom(buddy, user): Promise<string> {
-    let room = buddy + ' ' + user;
-    return new Promise(resolve=> (this.http.get(environment.devHost + '/room', { params: new HttpParams().set('users', room), observe: 'response' }).subscribe((response:any) => {
-      console.log(response.body)
-      resolve (response.body.room);
+    let list = [
+       {
+        'email': buddy
+      },
+      { 'email': user }
+
+
+    ]
+    return new Promise(resolve => (this.http.post(environment.devHost + '/room', list, { observe: 'response' }).subscribe((response: any) => {
+     
+      resolve(response.body.name);
     })))
 
   }
@@ -147,13 +154,13 @@ export class ChatService {
       return response.body;
     }))
   }
-  sendPublic(text){
-    this.stompClient.send('/app/newMessage/Public', {}, JSON.stringify({ 'author': this.cookie.get('mychat-user'),'text':text,'room':'Public' }))
+  sendPublic(text) {
+    this.stompClient.send('/app/newMessage/Public', {}, JSON.stringify({ 'author': this.cookie.get('mychat-user'), 'text': text, 'room': 'Public' }))
   }
-getMyDetails(){
-  return this.cookie.get('mychat-user')
-}
-setMyDetails(user){
-  this.cookie.set('mychat-user',user)
-}
+  getMyDetails() {
+    return this.cookie.get('mychat-user')
+  }
+  setMyDetails(user) {
+    this.cookie.set('mychat-user', user)
+  }
 }

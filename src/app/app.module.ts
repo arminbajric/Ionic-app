@@ -10,18 +10,21 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
+import { CwindowPage } from './pages/cwindow/cwindow.page';
+import { CwindowPageModule } from './pages/cwindow/cwindow.module';
 
 
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents:[CwindowPage],
   imports: [BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     FormsModule,
      ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    CwindowPageModule
   ],
   providers: [
     
@@ -34,6 +37,7 @@ import { CookieService } from 'ngx-cookie-service';
   exports:[
     ReactiveFormsModule,
     FormsModule
-  ]
+  ],
+ 
 })
 export class AppModule { }
