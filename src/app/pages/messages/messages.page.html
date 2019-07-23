@@ -5,5 +5,21 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-list *ngFor="let msg of messages">
+   
+  
+    <ion-item-sliding>
+      <ion-item>
+        <ion-label><h2>{{msg.username}}</h2>
+          <h3>{{msg.text}}</h3>
+          <p><small>{{msg.createDate | date: 'dd/MM/yyyy H:mm:ss' }}</small></p></ion-label><br>
+        
+        
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option (click)="unread(item)">Unread</ion-item-option>
+        <ion-item-option (click)="delete(item)">Delete</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>

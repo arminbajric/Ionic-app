@@ -97,9 +97,9 @@ export class ChatService {
   connectionListener(): boolean {
     return this.connectionActive;
   }
-  getUsersConversation(user, buddy): Observable<any> {
+  getUsersConversation(user): Observable<any> {
 
-    return this.http.get(this.environment.devHost + '/conversation', { params: new HttpParams().set('user', user).set('type', buddy), observe: 'response' }).pipe(map((response:any) => {
+    return this.http.get(this.environment.devHost + '/conversation', { params: new HttpParams().set('user', user), observe: 'response' }).pipe(map((response:any) => {
       return response.body;
     }))
   }
@@ -134,6 +134,8 @@ export class ChatService {
     }))
   }
   generateConversationRoom(buddy, user): Promise<string> {
+    console.log(buddy);
+  console.log(user);
     let list = [
        {
         'email': buddy
@@ -143,8 +145,8 @@ export class ChatService {
 
     ]
     return new Promise(resolve => (this.http.post(environment.devHost + '/room', list, { observe: 'response' }).subscribe((response: any) => {
-     
-      resolve(response.body.name);
+      
+      resolve(response.body[0].name);
     })))
 
   }

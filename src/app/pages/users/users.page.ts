@@ -61,8 +61,10 @@ async openChatWindow(event) {
   let user = (event.target as Element).id;
   let name=(event.target as Element).textContent;
   let room;
+  
   await this.chat.generateConversationRoom(user,this.chat.getMyDetails()).then(value=>{
         room=value;
+      
   })
   const modal = await this.modalController.create({
     component: CwindowPage,
