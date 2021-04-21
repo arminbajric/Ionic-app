@@ -28,7 +28,7 @@
     "core-js": "^2.5.4",
     "ngx-cookie-service": "^2.2.0",
     "rxjs": "~6.5.1",
-    "sockjs": "^0.3.19",
+    "sockjs": "^0.3.20",
     "sockjs-client": "^1.3.0",
     "stompjs": "^2.3.3",
     "tslib": "^1.9.0",
